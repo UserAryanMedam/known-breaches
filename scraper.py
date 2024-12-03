@@ -168,6 +168,42 @@ def scrape_dehashed(session=generate_requests_session()):
         return breaches
     else:
         return None
+    
+def stats(breaches):
+    total_recs = 0
+    max_recs = 0
+    max_recs_source = ""
+    seen_entries = set()
+
+
+    for element in breaches:
+        current_recs = (element).get('record_count')
+        
+        dump_name = element.get('dump_name')
+        breach_date = element.get('breach_date')
+            
+            # Check for duplicates
+        if (dump_name, breach_date) in seen_entries:
+            print(f"Duplicate detected: {dump_name}, {breach_date}. Skipping.")
+            continue
+
+        seen_entries.add((dump_name, breach_date))
+        
+        try:
+            current_recs = int(current_recs)
+            total_recs += (current_recs)
+            if (current_recs > max_recs):
+                max_recs = current_recs
+                max_recs_source= (element).get('dump_name')
+        except:
+           pass
+
+        
+
+
+    # sums total records leaked
+
+    return [total_recs, max_recs, max_recs_source]
 
 if __name__ == "__main__":
     # scrape datasets from dehashed
@@ -254,4 +290,8 @@ if __name__ == "__main__":
     with open("datasets/combined.json", "w") as f:
         f.write(json.dumps(breaches, separators=(',', ':')))
 
+    
+    statistics = stats(breaches)
+    print(f" total records leaked: {statistics[0]} \n greatest number of records leaked from one source: {statistics[1]} \n source of that leak: {statistics[2]}")
+   
     print("Done :)")
