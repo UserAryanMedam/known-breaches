@@ -3,6 +3,7 @@ import json
 import csv
 import os
 from bs4 import BeautifulSoup
+from urllib.parse import urlparse
 
 """
 Scrapes in the indexed/available datasets from several data aggregators/indexers. Currently supports Dehashed, Leak-Lookup, HaveIBeenPwned
@@ -168,6 +169,12 @@ def scrape_dehashed(session=generate_requests_session()):
         return breaches
     else:
         return None
+    
+def extract_base_domain(url):
+    parsed_url = urlparse(url)
+    domain = parsed_url.netloc
+    base_domain = domain.split('.')[-2]  # Extract the second-to-last part of the domain
+    return base_domain
     
 def stats(breaches):
     total_recs = 0
