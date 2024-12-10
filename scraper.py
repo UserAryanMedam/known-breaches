@@ -212,8 +212,25 @@ def stats(breaches):
 
     return [total_recs, max_recs, max_recs_source]
 
+# path for history json /Users/venkateswarlumedam/Downloads/Takeout-3/Chrome/History.json
+
+def history_json_to_sites(path):
+    
+    base_url_set = set([])
+
+    with open(path, 'r') as file:
+        history_data = json.load(file)
+        for element in history_data["Browser History"]:
+
+            base_url_set.add(extract_base_domain(str(element["url"])))
+    return base_url_set
+    
+
 if __name__ == "__main__":
     # scrape datasets from dehashed
+    history = history_json_to_sites("/Users/venkateswarlumedam/Downloads/Takeout-3/Chrome/History.json")
+    
+
     breaches = []
     print("Scraping Dehashed.com")
     try:
@@ -299,6 +316,18 @@ if __name__ == "__main__":
 
     
     statistics = stats(breaches)
+
+    
+    breached_sites = set([])
+    for breach in breaches:
+        breached_sites.add(breach['dump_name']) # add breached sites to the set as a list
+    
+    for breach in breached_sites:
+        if (breach in history):
+            print(breach)
+        
+
+
     print(f" total records leaked: {statistics[0]} \n greatest number of records leaked from one source: {statistics[1]} \n source of that leak: {statistics[2]}")
    
     print("Done :)")
