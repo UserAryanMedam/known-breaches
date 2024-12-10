@@ -184,7 +184,7 @@ def stats(breaches):
             
             # Check for duplicates
         if (dump_name, breach_date) in seen_entries:
-            print(f"Duplicate detected: {dump_name}, {breach_date}. Skipping.")
+            # print(f"Duplicate detected: {dump_name}, {breach_date}. Skipping.")
             continue
 
         seen_entries.add((dump_name, breach_date))
