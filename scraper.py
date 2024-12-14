@@ -231,7 +231,7 @@ def history_json_to_sites(path):
 if __name__ == "__main__":
     # scrape datasets from dehashed
     history = history_json_to_sites("/Users/venkateswarlumedam/Downloads/Takeout-3/Chrome/History.json")
-    
+    # replace this with your own Takeout/Chrome/History.json path 
 
     breaches = []
     print("Scraping Dehashed.com")
