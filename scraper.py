@@ -1,3 +1,5 @@
+import subprocess
+import sys
 import requests
 import json
 import csv
@@ -322,12 +324,30 @@ if __name__ == "__main__":
     for breach in breaches:
         breached_sites.add(breach['dump_name']) # add breached sites to the set as a list
     
+    breaches_that_affect_you = []
     for breach in breached_sites:
         if (breach in history):
-            print(breach)
-        
+            breaches_that_affect_you.append(breach)
+    subprocess.call(['touch', "breaches_that_affect_you.txt"])
+    os.remove("breaches_that_affect_you.txt")
+    print(breaches_that_affect_you)
+    
+    subprocess.call(['touch', "breaches_that_affect_you.txt"])
+
+    # with open("breaches_that_affect_you.csv", "w", newline="") as CSVFILE:
+    #     writer = csv.writer(CSVFILE, delimiter=',')
+    #     writer.writerows(breaches_that_affect_you)
+    FILE = open("breaches_that_affect_you.txt", "a")
+    for element in breaches_that_affect_you:
+
+        FILE.write(element)
+        FILE.write("\n")
+    FILE.close()
+
+    # writes the shared breaches to file
+    
 
 
     print(f" total records leaked: {statistics[0]} \n greatest number of records leaked from one source: {statistics[1]} \n source of that leak: {statistics[2]}")
-   
+    subprocess.call(["python3", "-m", "http.server", "8080"])
     print("Done :)")

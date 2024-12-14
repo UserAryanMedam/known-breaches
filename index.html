@@ -63,7 +63,7 @@
             <h4>Breach Search</h4>
             <div id="breach_div">
                 <p>Loading breaches...</p>
-                <img src="loading.gif" id="loading_img" style="display:block;margin-left:auto;margin-right:auto;">
+                <!-- <img src="loading.gif" id="loading_img" style="display:block;margin-left:auto;margin-right:auto;"> -->
             </div>
             <hr>
         </div>
@@ -72,5 +72,32 @@
                 $('#breach_table').dataTable();
             });
         </script>
+    <hr>
+    
+    <div id="breaches_that_affect_you" class="container">
+        
+        <h4>Breaches That Are More Likely to Affect You</h4>
+        <ul id="breaches_list"> <!-- Placeholder for list items --> </ul>
+        
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Load content from breaches_that_affect_you.txt
+            $.get('breaches_that_affect_you.txt', function(data) {
+                // Split the content by newlines to create a list
+                let breaches = data.split('\n');
+                let breachesList = $('#breaches_list');
+                breaches.forEach(function(breach) {
+                    if (breach.trim() !== '') {
+                        breachesList.append('<li>' + breach + '</li>');
+                    }
+                });
+            }).fail(function() {
+                $('#breaches_list').html("<li>Failed to load breaches_that_affect_you.txt.</li>");
+            });
+        });
+    </script>
+    <br>    
     </body>
 </html>
